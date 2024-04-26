@@ -29,8 +29,6 @@ jobs:
       GPG_PRIVATE_KEY: ${{secrets.GPG_PRIVATE_KEY}}
   TestLibrary:
     uses: GuicedEE/Workflows/.github/workflows/projects.yml@master
-    needs:
-      - Parent
     with:
       baseDir: 'Test-Library/'
       name: 'Test-Library'
