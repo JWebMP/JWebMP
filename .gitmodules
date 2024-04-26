@@ -1,0 +1,21 @@
+[submodule "BOM"]
+	path = BOM
+	url = https://github.com/JWebMP/BOM.git
+[submodule "Parent"]
+	path = Parent
+	url = https://github.com/JWebMP/Parent.git
+[submodule "Client"]
+	path = Client
+	url = https://github.com/JWebMP/Client.git
+[submodule "Core"]
+	path = Core
+	url = https://github.com/JWebMP/Core.git
+[submodule "Test-Library"]
+	path = Test-Library
+	url = https://github.com/JWebMP/Test-Library.git
+[submodule "Servlets"]
+	path = Servlets
+	url = https://github.com/JWebMP/Servlets.git
+[submodule "Plugins"]
+	path = Plugins
+	url = https://github.com/JWebMP/Plugins.git
