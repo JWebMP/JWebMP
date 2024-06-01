@@ -75,7 +75,7 @@ jobs:
     needs:
       - Client
     with:
-      baseDir: 'Plugins/TypescriptClient'
+      baseDir: 'Plugins/TypescriptClient/'
       name: 'Typescript Client'
       publishToCentral: ${{inputs.centralRelease}}
     secrets:
@@ -106,7 +106,7 @@ jobs:
       - Core
       - TypescriptClient
     with:
-      baseDir: 'Plugins/Angular'
+      baseDir: 'Plugins/Angular/'
       name: 'Angular'
       publishToCentral: ${{inputs.centralRelease}}
     secrets:
@@ -121,7 +121,7 @@ jobs:
     needs:
       - Angular
     with:
-      baseDir: 'Plugins/AngularForms'
+      baseDir: 'Plugins/AngularForms/'
       name: 'Angular Forms'
       publishToCentral: ${{inputs.centralRelease}}
     secrets:
@@ -136,7 +136,7 @@ jobs:
     needs:
       - AngularForms
     with:
-      baseDir: 'Plugins/Bootstrap'
+      baseDir: 'Plugins/Bootstrap/'
       name: 'Bootstrap'
       publishToCentral: ${{inputs.centralRelease}}
     secrets:
