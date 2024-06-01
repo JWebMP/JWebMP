@@ -183,8 +183,8 @@ jobs:
     needs:
       - JQuery
     with:
-      baseDir: 'Plugins/Waypoints/'
-      name: 'Waypoints'
+      baseDir: 'Plugins/WayPoints/'
+      name: 'Way Points'
       publishToCentral: ${{inputs.centralRelease}}
     secrets:
       USERNAME: ${{secrets.USERNAME}}
