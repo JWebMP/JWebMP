@@ -146,3 +146,281 @@ jobs:
       SONA_PASSWORD: ${{secrets.SONA_PASSWORD}}
       GPG_PASSPHRASE: ${{secrets.GPG_PASSPHRASE}}
       GPG_PRIVATE_KEY: ${{secrets.GPG_PRIVATE_KEY}}
+  JQuery:
+    uses: GuicedEE/Workflows/.github/workflows/projects.yml@master
+    needs:
+      - Client
+      - TypescriptClient
+    with:
+      baseDir: 'Plugins/JQuery/'
+      name: 'JQuery'
+      publishToCentral: ${{inputs.centralRelease}}
+    secrets:
+      USERNAME: ${{secrets.USERNAME}}
+      USER_TOKEN: ${{secrets.USER_TOKEN}}
+      SONA_USERNAME: ${{secrets.SONA_USERNAME}}
+      SONA_PASSWORD: ${{secrets.SONA_PASSWORD}}
+      GPG_PASSPHRASE: ${{secrets.GPG_PASSPHRASE}}
+      GPG_PRIVATE_KEY: ${{secrets.GPG_PRIVATE_KEY}}
+  Globalize:
+    uses: GuicedEE/Workflows/.github/workflows/projects.yml@master
+    needs:
+      - Client
+      - TypescriptClient
+    with:
+      baseDir: 'Plugins/Globalize/'
+      name: 'Globalize'
+      publishToCentral: ${{inputs.centralRelease}}
+    secrets:
+      USERNAME: ${{secrets.USERNAME}}
+      USER_TOKEN: ${{secrets.USER_TOKEN}}
+      SONA_USERNAME: ${{secrets.SONA_USERNAME}}
+      SONA_PASSWORD: ${{secrets.SONA_PASSWORD}}
+      GPG_PASSPHRASE: ${{secrets.GPG_PASSPHRASE}}
+      GPG_PRIVATE_KEY: ${{secrets.GPG_PRIVATE_KEY}}
+  Waypoints:
+    uses: GuicedEE/Workflows/.github/workflows/projects.yml@master
+    needs:
+      - JQuery
+    with:
+      baseDir: 'Plugins/Waypoints/'
+      name: 'Waypoints'
+      publishToCentral: ${{inputs.centralRelease}}
+    secrets:
+      USERNAME: ${{secrets.USERNAME}}
+      USER_TOKEN: ${{secrets.USER_TOKEN}}
+      SONA_USERNAME: ${{secrets.SONA_USERNAME}}
+      SONA_PASSWORD: ${{secrets.SONA_PASSWORD}}
+      GPG_PASSPHRASE: ${{secrets.GPG_PASSPHRASE}}
+      GPG_PRIVATE_KEY: ${{secrets.GPG_PRIVATE_KEY}}
+  EasingEffects:
+    uses: GuicedEE/Workflows/.github/workflows/projects.yml@master
+    needs:
+      - Core
+      - TypescriptClient
+    with:
+      baseDir: 'Plugins/EasingEffects/'
+      name: 'Easing Effects'
+      publishToCentral: ${{inputs.centralRelease}}
+    secrets:
+      USERNAME: ${{secrets.USERNAME}}
+      USER_TOKEN: ${{secrets.USER_TOKEN}}
+      SONA_USERNAME: ${{secrets.SONA_USERNAME}}
+      SONA_PASSWORD: ${{secrets.SONA_PASSWORD}}
+      GPG_PASSPHRASE: ${{secrets.GPG_PASSPHRASE}}
+      GPG_PRIVATE_KEY: ${{secrets.GPG_PRIVATE_KEY}}
+  JQueryUI:
+    uses: GuicedEE/Workflows/.github/workflows/projects.yml@master
+    needs:
+      - JQuery
+      - EasingEffects
+      - Globalize
+    with:
+      baseDir: 'Plugins/JQueryUI/'
+      name: 'JQuery UI'
+      publishToCentral: ${{inputs.centralRelease}}
+    secrets:
+      USERNAME: ${{secrets.USERNAME}}
+      USER_TOKEN: ${{secrets.USER_TOKEN}}
+      SONA_USERNAME: ${{secrets.SONA_USERNAME}}
+      SONA_PASSWORD: ${{secrets.SONA_PASSWORD}}
+      GPG_PASSPHRASE: ${{secrets.GPG_PASSPHRASE}}
+      GPG_PRIVATE_KEY: ${{secrets.GPG_PRIVATE_KEY}}
+  WavesEffect:
+    uses: GuicedEE/Workflows/.github/workflows/projects.yml@master
+    needs:
+      - Core
+      - TypescriptClient
+    with:
+      baseDir: 'Plugins/WavesEffect/'
+      name: 'Waves Effect'
+      publishToCentral: ${{inputs.centralRelease}}
+    secrets:
+      USERNAME: ${{secrets.USERNAME}}
+      USER_TOKEN: ${{secrets.USER_TOKEN}}
+      SONA_USERNAME: ${{secrets.SONA_USERNAME}}
+      SONA_PASSWORD: ${{secrets.SONA_PASSWORD}}
+      GPG_PASSPHRASE: ${{secrets.GPG_PASSPHRASE}}
+      GPG_PRIVATE_KEY: ${{secrets.GPG_PRIVATE_KEY}}
+  Toastr:
+    uses: GuicedEE/Workflows/.github/workflows/projects.yml@master
+    needs:
+      - JQuery
+      - EasingEffects
+    with:
+      baseDir: 'Plugins/Toastr/'
+      name: 'Toastr'
+      publishToCentral: ${{inputs.centralRelease}}
+    secrets:
+      USERNAME: ${{secrets.USERNAME}}
+      USER_TOKEN: ${{secrets.USER_TOKEN}}
+      SONA_USERNAME: ${{secrets.SONA_USERNAME}}
+      SONA_PASSWORD: ${{secrets.SONA_PASSWORD}}
+      GPG_PASSPHRASE: ${{secrets.GPG_PASSPHRASE}}
+      GPG_PRIVATE_KEY: ${{secrets.GPG_PRIVATE_KEY}}
+  Prettify:
+    uses: GuicedEE/Workflows/.github/workflows/projects.yml@master
+    needs:
+      - Core
+      - TypescriptClient
+    with:
+      baseDir: 'Plugins/Prettify/'
+      name: 'Prettify'
+      publishToCentral: ${{inputs.centralRelease}}
+    secrets:
+      USERNAME: ${{secrets.USERNAME}}
+      USER_TOKEN: ${{secrets.USER_TOKEN}}
+      SONA_USERNAME: ${{secrets.SONA_USERNAME}}
+      SONA_PASSWORD: ${{secrets.SONA_PASSWORD}}
+      GPG_PASSPHRASE: ${{secrets.GPG_PASSPHRASE}}
+      GPG_PRIVATE_KEY: ${{secrets.GPG_PRIVATE_KEY}}
+  PlusAsTab:
+    uses: GuicedEE/Workflows/.github/workflows/projects.yml@master
+    needs:
+      - Core
+      - TypescriptClient
+    with:
+      baseDir: 'Plugins/PlusAsTab/'
+      name: 'Plus as Tab'
+      publishToCentral: ${{inputs.centralRelease}}
+    secrets:
+      USERNAME: ${{secrets.USERNAME}}
+      USER_TOKEN: ${{secrets.USER_TOKEN}}
+      SONA_USERNAME: ${{secrets.SONA_USERNAME}}
+      SONA_PASSWORD: ${{secrets.SONA_PASSWORD}}
+      GPG_PASSPHRASE: ${{secrets.GPG_PASSPHRASE}}
+      GPG_PRIVATE_KEY: ${{secrets.GPG_PRIVATE_KEY}}
+  DataTables:
+    uses: GuicedEE/Workflows/.github/workflows/projects.yml@master
+    needs:
+      - Core
+      - JQuery
+      - TypescriptClient
+    with:
+      baseDir: 'Plugins/DataTables/'
+      name: 'DataTables'
+      publishToCentral: ${{inputs.centralRelease}}
+    secrets:
+      USERNAME: ${{secrets.USERNAME}}
+      USER_TOKEN: ${{secrets.USER_TOKEN}}
+      SONA_USERNAME: ${{secrets.SONA_USERNAME}}
+      SONA_PASSWORD: ${{secrets.SONA_PASSWORD}}
+      GPG_PASSPHRASE: ${{secrets.GPG_PASSPHRASE}}
+      GPG_PRIVATE_KEY: ${{secrets.GPG_PRIVATE_KEY}}
+  DataTablesBS:
+    uses: GuicedEE/Workflows/.github/workflows/projects.yml@master
+    needs:
+      - DataTables
+      - Bootstrap
+    with:
+      baseDir: 'Plugins/DataTables-Bootstrap/'
+      name: 'DataTables - Bootstrap Theme'
+      publishToCentral: ${{inputs.centralRelease}}
+    secrets:
+      USERNAME: ${{secrets.USERNAME}}
+      USER_TOKEN: ${{secrets.USER_TOKEN}}
+      SONA_USERNAME: ${{secrets.SONA_USERNAME}}
+      SONA_PASSWORD: ${{secrets.SONA_PASSWORD}}
+      GPG_PASSPHRASE: ${{secrets.GPG_PASSPHRASE}}
+      GPG_PRIVATE_KEY: ${{secrets.GPG_PRIVATE_KEY}}
+  DataTablesDefault:
+    uses: GuicedEE/Workflows/.github/workflows/projects.yml@master
+    needs:
+      - DataTables
+    with:
+      baseDir: 'Plugins/DataTables-DefaultTheme/'
+      name: 'DataTables - Default Theme'
+      publishToCentral: ${{inputs.centralRelease}}
+    secrets:
+      USERNAME: ${{secrets.USERNAME}}
+      USER_TOKEN: ${{secrets.USER_TOKEN}}
+      SONA_USERNAME: ${{secrets.SONA_USERNAME}}
+      SONA_PASSWORD: ${{secrets.SONA_PASSWORD}}
+      GPG_PASSPHRASE: ${{secrets.GPG_PASSPHRASE}}
+      GPG_PRIVATE_KEY: ${{secrets.GPG_PRIVATE_KEY}}
+
+  ChartJS:
+    uses: GuicedEE/Workflows/.github/workflows/projects.yml@master
+    needs:
+      - Core
+      - Angular
+    with:
+      baseDir: 'Plugins/ChartJS/'
+      name: 'ChartJS'
+      publishToCentral: ${{inputs.centralRelease}}
+    secrets:
+      USERNAME: ${{secrets.USERNAME}}
+      USER_TOKEN: ${{secrets.USER_TOKEN}}
+      SONA_USERNAME: ${{secrets.SONA_USERNAME}}
+      SONA_PASSWORD: ${{secrets.SONA_PASSWORD}}
+      GPG_PASSPHRASE: ${{secrets.GPG_PASSPHRASE}}
+      GPG_PRIVATE_KEY: ${{secrets.GPG_PRIVATE_KEY}}
+
+  FontAwesome:
+    uses: GuicedEE/Workflows/.github/workflows/projects.yml@master
+    needs:
+      - Core
+      - Angular
+    with:
+      baseDir: 'Plugins/FontAwesome/'
+      name: 'Font Awesome'
+      publishToCentral: ${{inputs.centralRelease}}
+    secrets:
+      USERNAME: ${{secrets.USERNAME}}
+      USER_TOKEN: ${{secrets.USER_TOKEN}}
+      SONA_USERNAME: ${{secrets.SONA_USERNAME}}
+      SONA_PASSWORD: ${{secrets.SONA_PASSWORD}}
+      GPG_PASSPHRASE: ${{secrets.GPG_PASSPHRASE}}
+      GPG_PRIVATE_KEY: ${{secrets.GPG_PRIVATE_KEY}}
+  FontAwesomePro:
+    uses: GuicedEE/Workflows/.github/workflows/projects.yml@master
+    needs:
+      - FontAwesome
+    with:
+      baseDir: 'Plugins/FontAwesomePro/'
+      name: 'Font Awesome - Pro'
+      publishToCentral: ${{inputs.centralRelease}}
+    secrets:
+      USERNAME: ${{secrets.USERNAME}}
+      USER_TOKEN: ${{secrets.USER_TOKEN}}
+      SONA_USERNAME: ${{secrets.SONA_USERNAME}}
+      SONA_PASSWORD: ${{secrets.SONA_PASSWORD}}
+      GPG_PASSPHRASE: ${{secrets.GPG_PASSPHRASE}}
+      GPG_PRIVATE_KEY: ${{secrets.GPG_PRIVATE_KEY}}
+
+  FullCalendar:
+    uses: GuicedEE/Workflows/.github/workflows/projects.yml@master
+    needs:
+      - Core
+      - Angular
+    with:
+      baseDir: 'Plugins/FullCalendar/'
+      name: 'Full Calendar'
+      publishToCentral: ${{inputs.centralRelease}}
+    secrets:
+      USERNAME: ${{secrets.USERNAME}}
+      USER_TOKEN: ${{secrets.USER_TOKEN}}
+      SONA_USERNAME: ${{secrets.SONA_USERNAME}}
+      SONA_PASSWORD: ${{secrets.SONA_PASSWORD}}
+      GPG_PASSPHRASE: ${{secrets.GPG_PASSPHRASE}}
+      GPG_PRIVATE_KEY: ${{secrets.GPG_PRIVATE_KEY}}
+  FullCalendarPro:
+    uses: GuicedEE/Workflows/.github/workflows/projects.yml@master
+    needs:
+      - FullCalendar
+    with:
+      baseDir: 'Plugins/FullCalendarPro/'
+      name: 'Full Calendar - Pro'
+      publishToCentral: ${{inputs.centralRelease}}
+    secrets:
+      USERNAME: ${{secrets.USERNAME}}
+      USER_TOKEN: ${{secrets.USER_TOKEN}}
+      SONA_USERNAME: ${{secrets.SONA_USERNAME}}
+      SONA_PASSWORD: ${{secrets.SONA_PASSWORD}}
+      GPG_PASSPHRASE: ${{secrets.GPG_PASSPHRASE}}
+      GPG_PRIVATE_KEY: ${{secrets.GPG_PRIVATE_KEY}}
+
+
+
+
+
