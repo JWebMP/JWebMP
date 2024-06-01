@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/BOM" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Client" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Core" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Parent" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Plugins" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Plugins/Angular" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Plugins/AngularForms" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Plugins/Bootstrap" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Plugins/BootstrapAngular" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Plugins/ChartJS" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Plugins/DataTables" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Plugins/DataTables-Bootstrap" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Plugins/DataTables-DefaultTheme" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Plugins/EasingEffects" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Plugins/FileUpload-JQuery" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Plugins/FontAwesome" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Plugins/FontAwesomePro" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Plugins/FullCalendar" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Plugins/FullCalendarPro" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Plugins/Gallery" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Plugins/Globalize" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Plugins/JQuery" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Plugins/JQueryUI" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Plugins/LocalStorage" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Plugins/Modernizr" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Plugins/Moment" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Plugins/PlusAsTab" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Plugins/Prettify" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Plugins/SessionStorage" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Plugins/Toastr" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Plugins/TypescriptClient" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Plugins/WavesEffect" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Plugins/WayPoints" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Servlets" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Test-Library" vcs="Git" />
+  </component>
+</project>
