@@ -451,38 +451,40 @@ jobs:
       SONA_PASSWORD: ${{secrets.SONA_PASSWORD}}
       GPG_PASSPHRASE: ${{secrets.GPG_PASSPHRASE}}
       GPG_PRIVATE_KEY: ${{secrets.GPG_PRIVATE_KEY}}
-#  BlueImpGallery:
-#    uses: GuicedEE/Workflows/.github/workflows/projects.yml@master
-#    needs:
-#      - Client
-#      - TypescriptClient
-#    with:
-#      baseDir: 'Plugins/Gallery/'
-#      name: 'BlueImp Gallery'
-#      publishToCentral: ${{inputs.centralRelease}}
-#    secrets:
-#      USERNAME: ${{secrets.USERNAME}}
-#      USER_TOKEN: ${{secrets.USER_TOKEN}}
-#      SONA_USERNAME: ${{secrets.SONA_USERNAME}}
-#      SONA_PASSWORD: ${{secrets.SONA_PASSWORD}}
-#      GPG_PASSPHRASE: ${{secrets.GPG_PASSPHRASE}}
-#      GPG_PRIVATE_KEY: ${{secrets.GPG_PRIVATE_KEY}}
-#  BlueImpFileUpload:
-#    uses: GuicedEE/Workflows/.github/workflows/projects.yml@master
-#    needs:
-#      - BlueImpGallery
-#      - JQueryUI
-#    with:
-#      baseDir: 'Plugins/FileUpload-JQuery/'
-#      name: 'BlueImp File Upload'
-#      publishToCentral: ${{inputs.centralRelease}}
-#    secrets:
-#      USERNAME: ${{secrets.USERNAME}}
-#      USER_TOKEN: ${{secrets.USER_TOKEN}}
-#      SONA_USERNAME: ${{secrets.SONA_USERNAME}}
-#      SONA_PASSWORD: ${{secrets.SONA_PASSWORD}}
-#      GPG_PASSPHRASE: ${{secrets.GPG_PASSPHRASE}}
-#      GPG_PRIVATE_KEY: ${{secrets.GPG_PRIVATE_KEY}}
+  BlueImpGallery:
+    uses: GuicedEE/Workflows/.github/workflows/projects.yml@master
+    needs:
+      - Client
+      - TypescriptClient
+    with:
+      baseDir: 'Plugins/Gallery/'
+      name: 'BlueImp Gallery'
+      publishToCentral: ${{inputs.centralRelease}}
+    secrets:
+      USERNAME: ${{secrets.USERNAME}}
+      USER_TOKEN: ${{secrets.USER_TOKEN}}
+      SONA_USERNAME: ${{secrets.SONA_USERNAME}}
+      SONA_PASSWORD: ${{secrets.SONA_PASSWORD}}
+      GPG_PASSPHRASE: ${{secrets.GPG_PASSPHRASE}}
+      GPG_PRIVATE_KEY: ${{secrets.GPG_PRIVATE_KEY}}
+  BlueImpFileUpload:
+    uses: GuicedEE/Workflows/.github/workflows/projects.yml@master
+    needs:
+      - BlueImpGallery
+      - JQueryUI
+    with:
+      baseDir: 'Plugins/FileUpload-JQuery/'
+      name: 'BlueImp File Upload'
+      publishToCentral: ${{inputs.centralRelease}}
+    secrets:
+      USERNAME: ${{secrets.USERNAME}}
+      USER_TOKEN: ${{secrets.USER_TOKEN}}
+      SONA_USERNAME: ${{secrets.SONA_USERNAME}}
+      SONA_PASSWORD: ${{secrets.SONA_PASSWORD}}
+      GPG_PASSPHRASE: ${{secrets.GPG_PASSPHRASE}}
+      GPG_PRIVATE_KEY: ${{secrets.GPG_PRIVATE_KEY}}
+
+
 
 
 
