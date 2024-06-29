@@ -7,13 +7,13 @@ import com.google.inject.OutOfScopeException;
 import com.google.inject.ProvisionException;
 import com.google.inject.name.Names;
 import com.guicedee.client.CallScoper;
+import com.guicedee.client.Environment;
 import com.guicedee.client.IGuiceContext;
 import com.guicedee.guicedinjection.interfaces.IGuiceModule;
 import com.guicedee.guicedservlets.servlets.services.scopes.CallScope;
 import com.guicedee.guicedservlets.websockets.options.CallScopeProperties;
 import com.guicedee.guicedservlets.websockets.options.CallScopeSource;
 import com.guicedee.services.jsonrepresentation.IJsonRepresentation;
-import com.guicedee.services.jsonrepresentation.json.StaticStrings;
 import com.guicedee.vertx.spi.VertxHttpServerConfigurator;
 import com.jwebmp.core.annotations.PageConfiguration;
 import com.jwebmp.core.base.ajax.*;
@@ -72,6 +72,36 @@ public class JWebMPVertx extends AbstractModule implements IGuiceModule<JWebMPVe
         return builder;
     }
 
+    @Override
+    protected void configure()
+    {
+        super.configure();
+        if (Boolean.parseBoolean(Environment.getProperty("BIND_JW_PAGES", "true")))
+        {
+            ScanResult scanResult = IGuiceContext.instance()
+                                                 .getScanResult();
+
+            for (ClassInfo classInfo : scanResult.getClassesWithAnnotation(PageConfiguration.class))
+            {
+                if (classInfo.isAbstract() || classInfo.isInterface() || classInfo.isStatic())
+                {
+                    continue;
+                }
+
+                @SuppressWarnings("unchecked")
+                Class<IPage<?>> pageClass = (Class<IPage<?>>) classInfo.loadClass();
+                PageConfiguration pc = pageClass.getAnnotation(PageConfiguration.class);
+                String url = pc.url();
+                if (Strings.isNullOrEmpty(url))
+                {
+                    url = "/";
+                }
+                bind(Key.get(IPage.class, Names.named(url))).to(pageClass)
+                                                            .in(CallScope.class);
+            }
+        }
+    }
+
     private void configureDataServlet(Router router)
     {
         router.route(DATA_LOCATION)
@@ -115,7 +145,6 @@ public class JWebMPVertx extends AbstractModule implements IGuiceModule<JWebMPVe
                   }
               });
     }
-
 
     private void configureCSSServlet(Router router)
     {
@@ -209,48 +238,47 @@ public class JWebMPVertx extends AbstractModule implements IGuiceModule<JWebMPVe
 
     private void configurePageServlet(Router router)
     {
-        ScanResult scanResult = IGuiceContext.instance()
-                                             .getScanResult();
-
-        for (ClassInfo classInfo : scanResult.getClassesWithAnnotation(PageConfiguration.class))
+        if (Boolean.parseBoolean(Environment.getProperty("BIND_JW_PAGES", "true")))
         {
-            if (classInfo.isAbstract() || classInfo.isInterface() || classInfo.isStatic())
+            ScanResult scanResult = IGuiceContext.instance()
+                                                 .getScanResult();
+
+            for (ClassInfo classInfo : scanResult.getClassesWithAnnotation(PageConfiguration.class))
             {
-                continue;
+                if (classInfo.isAbstract() || classInfo.isInterface() || classInfo.isStatic())
+                {
+                    continue;
+                }
+
+                @SuppressWarnings("unchecked")
+                Class<IPage<?>> pageClass = (Class<IPage<?>>) classInfo.loadClass();
+                PageConfiguration pc = pageClass.getAnnotation(PageConfiguration.class);
+                String url = pc.url();
+                if (Strings.isNullOrEmpty(url))
+                {
+                    url = "/";
+                }
+                String finalUrl = url;
+                router.get(url)
+                      .handler(routingContext -> {
+                          CallScoper scoper = IGuiceContext.get(CallScoper.class);
+                          scoper.enter();
+                          try
+                          {
+                              configureScopeProperties(routingContext);
+                              IPage<?> page = IGuiceContext.get(Key.get(IPage.class, Names.named(finalUrl)));
+                              String pageHtml = page.toString(true);
+                              routingContext.response()
+                                            .putHeader(CONTENT_TYPE, HTML_HEADER_DEFAULT_CONTENT_TYPE);
+                              routingContext.response()
+                                            .write(pageHtml, StandardCharsets.UTF_8.toString());
+                          }
+                          finally
+                          {
+                              scoper.exit();
+                          }
+                      });
             }
-
-            @SuppressWarnings("unchecked")
-            Class<IPage<?>> pageClass = (Class<IPage<?>>) classInfo.loadClass();
-            PageConfiguration pc = pageClass.getAnnotation(PageConfiguration.class);
-            String url = pc.url();
-            if (Strings.isNullOrEmpty(url))
-            {
-                url = "/";
-            }
-            String finalUrl = url;
-            router.route(url)
-                  .handler(routingContext -> {
-                      CallScoper scoper = IGuiceContext.get(CallScoper.class);
-                      scoper.enter();
-                      try
-                      {
-                          configureScopeProperties(routingContext);
-
-                          IPage<?> page = IGuiceContext.get(Key.get(IPage.class, Names.named(finalUrl)));
-                          String pageHtml = page.toString(true);
-
-                          routingContext.response()
-                                        .putHeader(CONTENT_TYPE, HTML_HEADER_DEFAULT_CONTENT_TYPE);
-                          routingContext.response()
-                                        .write(pageHtml, StandardCharsets.UTF_8.toString());
-                      }
-                      finally
-                      {
-                          scoper.exit();
-                      }
-                  });
-            bind(Key.get(IPage.class, Names.named(url))).to(pageClass)
-                                                        .in(CallScope.class);
         }
     }
 
@@ -274,7 +302,7 @@ public class JWebMPVertx extends AbstractModule implements IGuiceModule<JWebMPVe
 
     private void configureInternalDataServlet(Router router)
     {
-        router.route(JW_SCRIPT_LOCATION)
+        router.get(JW_SCRIPT_LOCATION)
               .handler(routingContext -> {
                   CallScoper scoper = IGuiceContext.get(CallScoper.class);
                   scoper.enter();
