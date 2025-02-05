@@ -8,11 +8,11 @@
     </parent>
 
     <groupId>com.jwebmp</groupId>
-    <artifactId>jwebmp-vertx</artifactId>
+    <artifactId>jwebmp-rabbitmq</artifactId>
     <packaging>jar</packaging>
     <version>2.0.0-SNAPSHOT</version>
-    <name>JWebMP Vert.X</name>
-    <description>A portable connector for JWebMP and Vert.x</description>
+    <name>JWebMP RabbitMQ Connectivity</name>
+    <description>A portable connector for JWebMP and RabbitMQ</description>
 
     <dependencies>
         <dependency>
@@ -21,23 +21,13 @@
         </dependency>
 
         <dependency>
-            <groupId>com.guicedee.services</groupId>
-            <artifactId>json-representation</artifactId>
+            <groupId>com.jwebmp</groupId>
+            <artifactId>jwebmp-vertx</artifactId>
         </dependency>
 
         <dependency>
             <groupId>com.guicedee</groupId>
-            <artifactId>guiced-vertx-sockets</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.guicedee.services</groupId>
-            <artifactId>uadetector-core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.guicedee.services</groupId>
-            <artifactId>uadetector-resources</artifactId>
+            <artifactId>guiced-rabbit</artifactId>
         </dependency>
 
         <dependency>
@@ -45,6 +35,16 @@
             <artifactId>guice-injection</artifactId>
             <version>2.0.0-SNAPSHOT</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.jwebmp.plugins</groupId>
+            <artifactId>angular</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.guicedee</groupId>
+            <artifactId>guice-injection</artifactId>
+            <version>2.0.0-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
 
     </dependencies>

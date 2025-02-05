@@ -1,3 +1,6 @@
 /Vert.x/flatter.pom
 target/
 /Plugins/Angular/webroot/
+/RabbitComms/flatter.pom
+**/**.tlog
+/RabbitComms/webroot/
