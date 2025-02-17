@@ -9,7 +9,7 @@ import com.jwebmp.core.base.angular.client.annotations.structures.NgField;
 import com.jwebmp.core.base.angular.client.annotations.structures.NgMethod;
 import com.jwebmp.core.base.angular.client.annotations.typescript.TsDependency;
 import com.jwebmp.core.base.angular.client.annotations.typescript.TsDevDependency;
-import com.jwebmp.core.base.angular.client.services.SocketClientService;
+import com.jwebmp.core.base.angular.client.services.EventBusService;
 import com.jwebmp.core.base.angular.client.services.interfaces.INgProvider;
 import com.jwebmp.core.base.angular.client.services.ContextIdService;
 
@@ -22,7 +22,7 @@ import java.util.List;
 
 @NgConstructorParameter(value = "private rabbitMqProvider : RabbitMQProvider", onParent = true, onSelf = false)
 
-@NgComponentReference(SocketClientService.class)
+@NgComponentReference(EventBusService.class)
 
 @NgComponentReference(ContextIdService.class)
 @NgConstructorParameter("private contextIdService : ContextIdService")
@@ -156,9 +156,11 @@ import java.util.List;
                  }""")
 
 @NgProvider
-public class RabbitMQProvider implements INgProvider<RabbitMQProvider> {
+public class RabbitMQProvider implements INgProvider<RabbitMQProvider>
+{
     @Override
-    public List<String> decorators() {
+    public List<String> decorators()
+    {
         List<String> out = INgProvider.super.decorators();
         out.add("@Injectable({\n" +
                 "  providedIn: 'root'\n" +
@@ -167,7 +169,8 @@ public class RabbitMQProvider implements INgProvider<RabbitMQProvider> {
     }
 
     @Override
-    public List<String> onDestroy() {
+    public List<String> onDestroy()
+    {
         var s = INgProvider.super.onDestroy();
         s.add("this.contextIdSubscription?.unsubscribe()");
         s.add("if(RabbitMQProvider.client && RabbitMQProvider.client.connected)\n" +

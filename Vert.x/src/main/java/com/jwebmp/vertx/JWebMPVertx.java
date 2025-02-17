@@ -176,6 +176,7 @@ public class JWebMPVertx extends AbstractModule implements IGuiceModule<JWebMPVe
         router.route(AJAX_SCRIPT_LOCATION)
                 .handler(routingContext -> {
                     CompletableFuture.runAsync(() -> {
+
                         configureScopeProperties(routingContext);
                         HttpServerRequest request = routingContext.request();
 

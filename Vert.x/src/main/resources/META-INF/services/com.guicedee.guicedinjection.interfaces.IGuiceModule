@@ -1,1 +1,2 @@
 com.jwebmp.vertx.JWebMPVertx
+com.jwebmp.vertx.implementations.JWebMPVertxBinder

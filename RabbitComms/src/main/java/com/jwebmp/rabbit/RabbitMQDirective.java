@@ -6,11 +6,9 @@ import com.jwebmp.core.base.angular.client.annotations.functions.NgOnDestroy;
 import com.jwebmp.core.base.angular.client.annotations.functions.NgOnInit;
 import com.jwebmp.core.base.angular.client.annotations.references.NgComponentReference;
 import com.jwebmp.core.base.angular.client.annotations.structures.NgField;
-import com.jwebmp.core.base.angular.client.services.SocketClientService;
 import com.jwebmp.core.base.angular.client.services.interfaces.AnnotationUtils;
 import com.jwebmp.core.base.angular.client.services.interfaces.INgDirective;
 import com.jwebmp.core.base.angular.modules.services.angular.WebSocketGroupAdd;
-import com.jwebmp.core.base.angular.modules.services.angular.WebSocketGroupsDirective;
 import com.jwebmp.core.base.interfaces.IComponentHierarchyBase;
 import com.jwebmp.rabbit.implementations.RabbitPublishToGroup;
 
@@ -22,10 +20,12 @@ import com.jwebmp.rabbit.implementations.RabbitPublishToGroup;
 )
 @NgOnDestroy(
         "this.rabbitMqProvider.removeGroup(this.group);")
-public class RabbitMQDirective implements INgDirective<RabbitMQDirective>, WebSocketGroupAdd<RabbitMQDirective> {
+public class RabbitMQDirective implements INgDirective<RabbitMQDirective>, WebSocketGroupAdd<RabbitMQDirective>
+{
 
     @Override
-    public boolean addGroup(IComponentHierarchyBase<?, ?> component, String groupName) {
+    public boolean addGroup(IComponentHierarchyBase<?, ?> component, String groupName)
+    {
         component.asAttributeBase().addAttribute("data-rabbit-groups", groupName);
         component.addConfiguration(AnnotationUtils.getNgComponentReference(RabbitMQDirective.class));
         IGuiceContext.get(RabbitPublishToGroup.class).onAddToGroup(groupName);

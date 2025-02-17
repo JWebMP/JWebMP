@@ -1,6 +1,4 @@
-import com.guicedee.vertx.websockets.GuicedWebSocketOnAddToGroup;
-import com.guicedee.vertx.websockets.GuicedWebSocketOnPublish;
-import com.guicedee.vertx.websockets.GuicedWebSocketOnRemoveFromGroup;
+import com.guicedee.guicedservlets.websockets.services.*;
 import com.jwebmp.rabbit.implementations.RabbitMQWebModuleInclusion;
 import com.guicedee.guicedinjection.interfaces.IGuiceScanModuleInclusions;
 import com.jwebmp.rabbit.implementations.RabbitPublishToGroup;
@@ -13,7 +11,7 @@ module com.jwebmp.rabbit {
     requires transitive com.jwebmp.vertx;
     requires transitive com.jwebmp.core.angular;
     requires com.jwebmp.core;
-    requires com.guicedee.vertx.sockets;
+    
     requires com.guicedee.rabbit;
     requires com.guicedee.guicedinjection;
 
