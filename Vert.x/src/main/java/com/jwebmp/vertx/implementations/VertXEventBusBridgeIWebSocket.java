@@ -32,7 +32,6 @@ public class VertXEventBusBridgeIWebSocket implements IGuicedWebSocket
     public void broadcastMessage(String groupName, String message)
     {
         //send to event bus address
-        JsonObject jo = new JsonObject(message);
         vertx.eventBus().publish(groupName, message);
     }
 

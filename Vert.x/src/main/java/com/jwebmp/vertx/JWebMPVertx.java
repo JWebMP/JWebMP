@@ -107,7 +107,7 @@ public class JWebMPVertx extends AbstractModule implements IGuiceModule<JWebMPVe
     {
         router.route(DATA_LOCATION)
                 .handler(routingContext -> {
-                    CompletableFuture.runAsync(() -> {
+                    vertx.executeBlocking(() -> {
                         CallScoper scoper = IGuiceContext.get(CallScoper.class);
                         scoper.enter();
                         try
@@ -131,7 +131,7 @@ public class JWebMPVertx extends AbstractModule implements IGuiceModule<JWebMPVe
                             } catch (Exception e)
                             {
                                 log.log(Level.SEVERE, MessageFormat.format("Cannot render data for component {0}", componentID), e);
-                                return;
+                                return null;
                             }
                             for (DataCallIntercepter<?> dataCallIntercepter : get(DataCallInterceptorKey))
                             {
@@ -143,6 +143,7 @@ public class JWebMPVertx extends AbstractModule implements IGuiceModule<JWebMPVe
                         {
                             scoper.exit();
                         }
+                        return null;
                     });
                 });
     }
@@ -151,7 +152,7 @@ public class JWebMPVertx extends AbstractModule implements IGuiceModule<JWebMPVe
     {
         router.route(CSS_LOCATION)
                 .handler(routingContext -> {
-                    CompletableFuture.runAsync(() -> {
+                    vertx.executeBlocking(() -> {
                         CallScoper scoper = IGuiceContext.get(CallScoper.class);
                         scoper.enter();
                         try
@@ -167,6 +168,7 @@ public class JWebMPVertx extends AbstractModule implements IGuiceModule<JWebMPVe
                         {
                             scoper.exit();
                         }
+                        return null;
                     });
                 });
     }
@@ -175,11 +177,9 @@ public class JWebMPVertx extends AbstractModule implements IGuiceModule<JWebMPVe
     {
         router.route(AJAX_SCRIPT_LOCATION)
                 .handler(routingContext -> {
-                    CompletableFuture.runAsync(() -> {
-
+                    vertx.executeBlocking(() -> {
                         configureScopeProperties(routingContext);
                         HttpServerRequest request = routingContext.request();
-
                         request.bodyHandler((handler) -> {
                             CallScoper scoper = IGuiceContext.get(CallScoper.class);
                             scoper.enter();
@@ -233,6 +233,8 @@ public class JWebMPVertx extends AbstractModule implements IGuiceModule<JWebMPVe
                                 scoper.exit();
                             }
                         });
+
+                        return null;
                     });
                 });
     }
@@ -262,7 +264,7 @@ public class JWebMPVertx extends AbstractModule implements IGuiceModule<JWebMPVe
                 String finalUrl = url;
                 router.getWithRegex(url + "*")
                         .handler(routingContext -> {
-                            CompletableFuture.runAsync(() -> {
+                            vertx.executeBlocking(() -> {
                                 CallScoper scoper = IGuiceContext.get(CallScoper.class);
                                 scoper.enter();
                                 try
@@ -278,6 +280,7 @@ public class JWebMPVertx extends AbstractModule implements IGuiceModule<JWebMPVe
                                 {
                                     scoper.exit();
                                 }
+                                return null;
                             });
                         });
             }
@@ -306,7 +309,7 @@ public class JWebMPVertx extends AbstractModule implements IGuiceModule<JWebMPVe
     {
         router.get(JW_SCRIPT_LOCATION)
                 .handler(routingContext -> {
-                    CompletableFuture.runAsync(() -> {
+                    vertx.executeBlocking(() -> {
                         CallScoper scoper = IGuiceContext.get(CallScoper.class);
                         scoper.enter();
                         try
@@ -358,6 +361,8 @@ public class JWebMPVertx extends AbstractModule implements IGuiceModule<JWebMPVe
                         {
                             scoper.exit();
                         }
+
+                        return null;
                     });
                 });
     }
