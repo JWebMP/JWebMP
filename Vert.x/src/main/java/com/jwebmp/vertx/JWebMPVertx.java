@@ -14,7 +14,7 @@ import com.guicedee.guicedservlets.servlets.services.scopes.CallScope;
 import com.guicedee.guicedservlets.websockets.options.CallScopeProperties;
 import com.guicedee.guicedservlets.websockets.options.CallScopeSource;
 import com.guicedee.services.jsonrepresentation.IJsonRepresentation;
-import com.guicedee.vertx.spi.VertxHttpServerConfigurator;
+import com.guicedee.vertx.web.spi.VertxHttpServerConfigurator;
 import com.jwebmp.core.annotations.PageConfiguration;
 import com.jwebmp.core.base.ajax.*;
 import com.jwebmp.core.base.interfaces.IComponentStyleBase;

@@ -55,7 +55,7 @@
         </dependency>
         <dependency>
             <groupId>com.guicedee</groupId>
-            <artifactId>guiced-vertx</artifactId>
+            <artifactId>guiced-vertx-web</artifactId>
         </dependency>
 
     </dependencies>
