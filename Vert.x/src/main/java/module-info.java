@@ -7,6 +7,9 @@ import com.guicedee.guicedinjection.interfaces.*;
 module com.jwebmp.vertx {
     requires transitive com.jwebmp.client;
     requires transitive com.guicedee.vertx.web;
+    requires transitive com.jwebmp.core;
+    requires transitive com.guicedee.guicedinjection;
+    requires transitive com.guicedee.jsonrepresentation;
 
     requires static lombok;
     requires org.apache.commons.lang3;

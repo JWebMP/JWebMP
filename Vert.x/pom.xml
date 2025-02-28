@@ -40,11 +40,7 @@
             <artifactId>uadetector-resources</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.guicedee</groupId>
-            <artifactId>guice-injection</artifactId>
-            <scope>test</scope>
-        </dependency>
+
         <dependency>
             <groupId>io.vertx</groupId>
             <artifactId>vertx-core</artifactId>
@@ -56,6 +52,15 @@
         <dependency>
             <groupId>com.guicedee</groupId>
             <artifactId>guiced-vertx-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.guicedee</groupId>
+            <artifactId>guice-injection</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jwebmp.core</groupId>
+            <artifactId>jwebmp-core</artifactId>
         </dependency>
 
     </dependencies>
