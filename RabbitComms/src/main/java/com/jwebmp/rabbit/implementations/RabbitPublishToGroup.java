@@ -3,8 +3,8 @@ package com.jwebmp.rabbit.implementations;
 import com.guicedee.guicedservlets.websockets.services.*;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.rabbitmq.RabbitMQClient;
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import lombok.extern.java.Log;
 
 import java.util.HashSet;
@@ -35,7 +35,10 @@ public class RabbitPublishToGroup implements GuicedWebSocketOnAddToGroup<RabbitP
     @Override
     public CompletableFuture<Boolean> onAddToGroup(String groupName)
     {
-        if (declaredExchanges.contains(groupName)) return CompletableFuture.completedFuture(true);
+        if (declaredExchanges.contains(groupName))
+        {
+            return CompletableFuture.completedFuture(true);
+        }
 
         CompletableFuture<Boolean> resultFuture = new CompletableFuture<>();
         if (client.isConnected())
@@ -47,13 +50,16 @@ public class RabbitPublishToGroup implements GuicedWebSocketOnAddToGroup<RabbitP
                     declaredExchanges.add(groupName);
                     log.info("Group [" + groupName + "] exchange created");
                     resultFuture.complete(true);
-                } else
+                }
+                else
                 {
-                    log.warning("Could not create group exchange [" + groupName + "] - " + handler.cause().getMessage());
+                    log.warning("Could not create group exchange [" + groupName + "] - " + handler.cause()
+                                                                                                  .getMessage());
                     resultFuture.complete(false);
                 }
             });
-        } else
+        }
+        else
         {
             client.addConnectionEstablishedCallback(connection -> {
                 var result = client.exchangeDeclare(groupName, "fanout", !groupName.startsWith("__vertx"), groupName.startsWith("__vertx"));
@@ -63,9 +69,11 @@ public class RabbitPublishToGroup implements GuicedWebSocketOnAddToGroup<RabbitP
                         declaredExchanges.add(groupName);
                         log.info("Group [" + groupName + "] exchange created after connection established");
                         resultFuture.complete(true);
-                    } else
+                    }
+                    else
                     {
-                        log.warning("Could not create group exchange on established [" + groupName + "] - " + handler.cause().getMessage());
+                        log.warning("Could not create group exchange on established [" + groupName + "] - " + handler.cause()
+                                                                                                                     .getMessage());
                         resultFuture.complete(false);
                     }
                 });
@@ -81,12 +89,18 @@ public class RabbitPublishToGroup implements GuicedWebSocketOnAddToGroup<RabbitP
         try
         {
             onAddToGroup(groupName).whenComplete((success, error) -> {
-                if (success)
-                    client.basicPublish(groupName, "", Buffer.buffer(message));
-                else
-                    log.log(Level.SEVERE, "Could not publish message to queue group [" + groupName + "]");
-            }).get(5, TimeUnit.SECONDS);
-        } catch (Exception e)
+                                       if (success)
+                                       {
+                                           client.basicPublish(groupName, "", Buffer.buffer(message));
+                                       }
+                                       else
+                                       {
+                                           log.log(Level.SEVERE, "Could not publish message to queue group [" + groupName + "]");
+                                       }
+                                   })
+                                   .get(5, TimeUnit.SECONDS);
+        }
+        catch (Exception e)
         {
             log.log(Level.SEVERE, "Could not publish message to queue group [" + groupName + "]", e);
             return false;

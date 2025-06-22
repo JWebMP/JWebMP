@@ -25,10 +25,10 @@
             <artifactId>json-representation</artifactId>
         </dependency>
 
- <!--       <dependency>
-            <groupId>com.guicedee</groupId>
-            <artifactId>guiced-vertx-sockets</artifactId>
-        </dependency>-->
+        <!--       <dependency>
+                   <groupId>com.guicedee</groupId>
+                   <artifactId>guiced-vertx-sockets</artifactId>
+               </dependency>-->
 
         <dependency>
             <groupId>com.guicedee.services</groupId>
@@ -61,6 +61,12 @@
         <dependency>
             <groupId>com.jwebmp.core</groupId>
             <artifactId>jwebmp-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jwebmp.core</groupId>
+            <artifactId>jwebmp-testlib</artifactId>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>

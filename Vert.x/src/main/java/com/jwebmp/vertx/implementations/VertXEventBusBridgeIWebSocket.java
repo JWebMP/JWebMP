@@ -1,11 +1,10 @@
 package com.jwebmp.vertx.implementations;
 
 import com.guicedee.guicedservlets.servlets.services.scopes.CallScope;
-import com.guicedee.guicedservlets.websockets.options.CallScopeProperties;
+import com.guicedee.client.CallScopeProperties;
 import com.guicedee.guicedservlets.websockets.options.IGuicedWebSocket;
 import io.vertx.core.Vertx;
-import io.vertx.core.json.JsonObject;
-import jakarta.inject.Inject;
+import com.google.inject.Inject;
 
 @CallScope
 public class VertXEventBusBridgeIWebSocket implements IGuicedWebSocket
@@ -32,7 +31,8 @@ public class VertXEventBusBridgeIWebSocket implements IGuicedWebSocket
     public void broadcastMessage(String groupName, String message)
     {
         //send to event bus address
-        vertx.eventBus().publish(groupName, message);
+        vertx.eventBus()
+             .publish(groupName, message);
     }
 
     @Override
@@ -44,6 +44,7 @@ public class VertXEventBusBridgeIWebSocket implements IGuicedWebSocket
     @Override
     public void broadcastMessageSync(String groupName, String message) throws Exception
     {
-        vertx.eventBus().publish(groupName, message);
+        vertx.eventBus()
+             .publish(groupName, message);
     }
 }
