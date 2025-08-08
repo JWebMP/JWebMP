@@ -4,3 +4,4 @@ target/
 /RabbitComms/flatter.pom
 **/**.tlog
 /RabbitComms/webroot/
+**/logs/

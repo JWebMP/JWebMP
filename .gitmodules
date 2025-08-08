@@ -19,3 +19,6 @@
 [submodule "Plugins"]
 	path = Plugins
 	url = https://github.com/JWebMP/Plugins.git
+[submodule "guides"]
+	path = guides
+	url = https://github.com/GuicedEE/junie-guides
