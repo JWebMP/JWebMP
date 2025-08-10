@@ -20,8 +20,10 @@ public class JWebMPVertxBinder extends AbstractModule implements IGuiceModule<JW
     @Override
     protected void configure()
     {
-        bind(ReadableUserAgent.class).toProvider(ReadableUserAgentProvider.class).in(CallScope.class);
-        bind(IGuicedWebSocket.class).to(VertXEventBusBridgeIWebSocket.class);
+        bind(ReadableUserAgent.class).toProvider(ReadableUserAgentProvider.class)
+                                     .in(CallScope.class);
+        //bind(IGuicedWebSocket.class).to(VertXEventBusBridgeIWebSocket.class);
+        bind(IGuicedWebSocket.class).to(VertXStompEventBusBridgeIWebSocket.class);
 
         ObjectMapper mapper = DatabindCodec.mapper();
 
