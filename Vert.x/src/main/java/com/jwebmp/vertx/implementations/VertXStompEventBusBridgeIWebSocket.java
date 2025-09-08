@@ -30,7 +30,7 @@ public class VertXStompEventBusBridgeIWebSocket implements IGuicedWebSocket
     {
         // Send to event bus address with STOMP destination prefix
         String stompDestination = "/toStomp/" + groupName;
-        log.debug("Broadcasting message to STOMP destination: {}", stompDestination);
+        log.trace("Broadcasting message to STOMP destination: {}", stompDestination);
         vertx.eventBus()
              .publish(stompDestination, message);
     }
