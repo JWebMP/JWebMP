@@ -32,6 +32,9 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
+import java.time.Duration;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 
 import static com.guicedee.client.IGuiceContext.get;
@@ -171,67 +174,173 @@ public class JWebMPVertx extends AbstractModule implements IGuiceModule<JWebMPVe
     {
         router.route(AJAX_SCRIPT_LOCATION)
               .handler(routingContext -> {
-                  vertx.executeBlocking(() -> {
-                      configureScopeProperties(routingContext);
-                      HttpServerRequest request = routingContext.request();
-                      request.bodyHandler((handler) -> {
-                          CallScoper scoper = IGuiceContext.get(CallScoper.class);
-                          scoper.enter();
+                  // Prepare per-request scope and request object
+                  configureScopeProperties(routingContext);
+                  HttpServerRequest request = routingContext.request();
+
+                  // Read the body asynchronously (don’t block the event loop)
+                  request.bodyHandler(bodyBuffer -> {
+                      CallScoper scoper = IGuiceContext.get(CallScoper.class);
+                      scoper.enter();
+                      try
+                      {
                           try
                           {
+                              String bodyString = bodyBuffer.toString();
+
+                              // Deserialize inbound call
+                              AjaxCall<?> ajaxCallIncoming = IJsonRepresentation.From(bodyString, AjaxCall.class);
+                              AjaxCall<?> ajaxCall = get(AjaxCall.class);
+                              ajaxCall.fromCall(ajaxCallIncoming);
+                              ajaxCall.setPageCall(true);
+
+                              // Prepare response holder and event
+                              AjaxResponse<?> ajaxResponse = get(AjaxResponse.class);
+                              IEvent<?, ?> triggerEvent = processEvent();
+
+                              // Interceptors
+                              for (AjaxCallIntercepter<?> ajaxCallIntercepter : get(AjaxCallInterceptorKey))
+                              {
+                                  ajaxCallIntercepter.intercept(ajaxCall, ajaxResponse);
+                              }
+
+                              // Fully reactive: do not block/await here. Subscribe and end response in the terminal callbacks.
+                              // Note: We intentionally avoid executeBlocking here. bodyHandler runs on the Vert.x event loop and fireEvent() returns a reactive Uni.
+                              // The Uni is subscribed below; any errors will be routed to the failure handler which returns a JSON error response.
+                              triggerEvent.fireEvent(ajaxCall, ajaxResponse)
+                                          // Optional timeout to guard long/never-completing chains
+                                          .ifNoItem()
+                                          .after(Duration.ofSeconds(10))
+                                          .fail()
+                                          .subscribe()
+                                          .with(
+                                                  unused -> {
+                                                      try
+                                                      {
+                                                          routingContext.response()
+                                                                        .putHeader(CONTENT_TYPE, HTML_HEADER_JSON)
+                                                                        .end(ajaxResponse.toJson());
+                                                      }
+                                                      finally
+                                                      {
+                                                          scoper.exit();
+                                                      }
+                                                  },
+                                                  failure -> {
+                                                      try
+                                                      {
+                                                          AjaxResponse<?> err = new AjaxResponse<>();
+                                                          err.setSuccess(false);
+
+                                                          if (failure instanceof InvalidRequestException ie)
+                                                          {
+                                                              AjaxResponseReaction<?> arr = new AjaxResponseReaction<>(
+                                                                      "Invalid Request Value",
+                                                                      "A value in the request was found to be incorrect.<br>" + ie.getMessage(),
+                                                                      ReactionType.DialogDisplay
+                                                              );
+                                                              arr.setResponseType(AjaxResponseType.Danger);
+                                                              err.addReaction(arr);
+                                                              log.log(Level.SEVERE, "[SessionID]-[" + request.streamId() + "];[Exception]-[Invalid Request]", ie);
+                                                          }
+                                                          else
+                                                          {
+                                                              AjaxResponseReaction<?> arr = new AjaxResponseReaction<>(
+                                                                      "Unknown Error",
+                                                                      "An AJAX call resulted in an unknown server error<br>" + failure.getMessage() +
+                                                                              "<br>" + ExceptionUtils.getStackTrace(failure),
+                                                                      ReactionType.DialogDisplay
+                                                              );
+                                                              arr.setResponseType(AjaxResponseType.Danger);
+                                                              err.addReaction(arr);
+                                                              log.log(Level.SEVERE, "Unknown in ajax reply\n", failure);
+                                                          }
+
+                                                          routingContext.response()
+                                                                        .putHeader(CONTENT_TYPE, HTML_HEADER_JSON)
+                                                                        .end(err.toJson());
+                                                      }
+                                                      finally
+                                                      {
+                                                          scoper.exit();
+                                                      }
+                                                  }
+                                          );
+                          }
+                          catch (InvalidRequestException ie)
+                          {
+                              // Synchronous failure before we could subscribe (e.g., JSON mapping of the envelope)
                               try
                               {
-                                  String bodyString = handler.toString();
-                                  AjaxCall<?> ajaxCallIncoming = IJsonRepresentation.From(bodyString, AjaxCall.class);
-                                  AjaxCall<?> ajaxCall = get(AjaxCall.class);
-                                  ajaxCall.fromCall(ajaxCallIncoming);
-                                  ajaxCall.setPageCall(true);
-                                  AjaxResponse<?> ajaxResponse = get(AjaxResponse.class);
-                                  IEvent<?, ?> triggerEvent = processEvent();
-                                  for (AjaxCallIntercepter<?> ajaxCallIntercepter : get(AjaxCallInterceptorKey))
-                                  {
-                                      ajaxCallIntercepter.intercept(ajaxCall, ajaxResponse);
-                                  }
-                                  triggerEvent.fireEvent(ajaxCall, ajaxResponse);
-                                  routingContext.response()
-                                                .putHeader(CONTENT_TYPE, HTML_HEADER_JSON);
-                                  routingContext.response()
-                                                .write(ajaxResponse.toJson());
-                              }
-                              catch (InvalidRequestException ie)
-                              {
                                   AjaxResponse<?> ajaxResponse = new AjaxResponse<>();
                                   ajaxResponse.setSuccess(false);
-                                  AjaxResponseReaction<?> arr = new AjaxResponseReaction<>("Invalid Request Value", "A value in the request was found to be incorrect.<br>" + ie.getMessage(), ReactionType.DialogDisplay);
+                                  AjaxResponseReaction<?> arr = new AjaxResponseReaction<>(
+                                          "Invalid Request Value",
+                                          "A value in the request was found to be incorrect.<br>" + ie.getMessage(),
+                                          ReactionType.DialogDisplay
+                                  );
                                   arr.setResponseType(AjaxResponseType.Danger);
                                   ajaxResponse.addReaction(arr);
-                                  log.log(Level.SEVERE, "[SessionID]-[" + request.streamId() + "];" + "[Exception]-[Invalid Request]", ie);
+                                  log.log(Level.SEVERE, "[SessionID]-[" + request.streamId() + "];[Exception]-[Invalid Request]", ie);
                                   routingContext.response()
-                                                .putHeader(CONTENT_TYPE, HTML_HEADER_JSON);
-                                  routingContext.response()
-                                                .write(ajaxResponse.toJson());
+                                                .putHeader(CONTENT_TYPE, HTML_HEADER_JSON)
+                                                .end(ajaxResponse.toJson());
                               }
-                              catch (Exception T)
+                              finally
+                              {
+                                  scoper.exit();
+                              }
+                          }
+                          catch (Exception T)
+                          {
+                              // Other synchronous failures before subscription
+                              try
                               {
                                   AjaxResponse<?> ajaxResponse = new AjaxResponse<>();
                                   ajaxResponse.setSuccess(false);
-                                  AjaxResponseReaction<?> arr = new AjaxResponseReaction<>("Unknown Error", "An AJAX call resulted in an unknown server error<br>" + T.getMessage() + "<br>" + ExceptionUtils.getStackTrace(T), ReactionType.DialogDisplay);
+                                  AjaxResponseReaction<?> arr = new AjaxResponseReaction<>(
+                                          "Unknown Error",
+                                          "An AJAX call resulted in an unknown server error<br>" + T.getMessage() +
+                                                  "<br>" + ExceptionUtils.getStackTrace(T),
+                                          ReactionType.DialogDisplay
+                                  );
                                   arr.setResponseType(AjaxResponseType.Danger);
                                   ajaxResponse.addReaction(arr);
                                   log.log(Level.SEVERE, "Unknown in ajax reply\n", T);
                                   routingContext.response()
-                                                .putHeader(CONTENT_TYPE, HTML_HEADER_JSON);
-                                  routingContext.response()
-                                                .write(ajaxResponse.toJson());
+                                                .putHeader(CONTENT_TYPE, HTML_HEADER_JSON)
+                                                .end(ajaxResponse.toJson());
                               }
+                              finally
+                              {
+                                  scoper.exit();
+                              }
+                          }
+                      }
+                      catch (Throwable swallow)
+                      {
+                          // Last-resort guard (avoid leaking scope on unexpected errors in above blocks)
+                          try
+                          {
+                              AjaxResponse<?> ajaxResponse = new AjaxResponse<>();
+                              ajaxResponse.setSuccess(false);
+                              AjaxResponseReaction<?> arr = new AjaxResponseReaction<>(
+                                      "Unknown Error",
+                                      "An unexpected server error occurred<br>" + swallow.getMessage() +
+                                              "<br>" + ExceptionUtils.getStackTrace(swallow),
+                                      ReactionType.DialogDisplay
+                              );
+                              arr.setResponseType(AjaxResponseType.Danger);
+                              ajaxResponse.addReaction(arr);
+                              routingContext.response()
+                                            .putHeader(CONTENT_TYPE, HTML_HEADER_JSON)
+                                            .end(ajaxResponse.toJson());
                           }
                           finally
                           {
                               scoper.exit();
                           }
-                      });
-
-                      return null;
+                      }
                   });
               });
     }
@@ -292,11 +401,11 @@ public class JWebMPVertx extends AbstractModule implements IGuiceModule<JWebMPVe
         callScopeProperties.setSource(CallScopeSource.Http);
 
         callScopeProperties.getProperties()
-                           .put("RoutingContext", routingContext.request());
+                           .put("RoutingContext", routingContext);
         callScopeProperties.getProperties()
                            .put("HttpServerRequest", routingContext.request());
         callScopeProperties.getProperties()
-                           .put("HttpServerResponse", routingContext.request());
+                           .put("HttpServerResponse", routingContext.response());
         callScopeProperties.getProperties()
                            .put("StreamId", routingContext.request()
                                                           .streamId());
