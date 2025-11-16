@@ -6,7 +6,7 @@ import io.smallrye.mutiny.Uni;
 
 import java.util.Set;
 
-public class JWebMPWebSocket implements IWebSocketMessageReceiver
+public class JWebMPWebSocket implements IWebSocketMessageReceiver<Void, JWebMPWebSocket>
 {
 
     @Override
